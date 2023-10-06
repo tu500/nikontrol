@@ -1,0 +1,4 @@
+python-osc
+gbulb
+pycairo
+hidapi

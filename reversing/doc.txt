@@ -1,0 +1,79 @@
+TODO
+pedal config ignored for now   (HID data: 6 times:  12 uint8_t)
+For example, USB spec says that a device cannot have an isochronous endpoint in its primary alternate setting [6], so a streaming device must have at least two alternate settings, with the second one having the isochronous endpoint(s).
+0xaf   uint8_t, uint8_t
+
+USB MESSAGES (HID reports) by report ID (first byte)
+struct members and their value ranges taken from the endpoint descriptor
+
+OUTGOING USB MESSAGES:
+0xa0   flag register, see below
+ uint8_t, uint8_t
+0xa1   button config
+0xa2   slider config
+0xa3   pedal config?
+0xa4   keyzone config
+0xaf   ?
+ uint8_t, uint8_t
+0xf3   master led dimmer?
+ uint8_t  0..127
+0xf4   ?
+ uint8_t
+ 31x uint8_t
+0x81   61x uint8_t 0..127   seems to be color byte per key  (like keyzone code)
+button backlights:
+0x80   69x uint8_t 0..127   set button backlights
+ ui buttons:
+   bits 2..6:  led on if value != 0
+   bits 0..1:  brightness levels: 0, 1, 2 (same as 3)
+ mute / solo buttons:
+   bits 2..6:  values 1..16: hue, >16: white
+   bits 0..1:  brightness levels: 0, 1, 2;  3 is level 2 + more lightness / desaturation
+ colors = ['off', 'red', 'orange-red', 'orange', 'yellow-orange', 'yellow', 'yellow-green', 'green', 'turquoise', 'cyan', 'greenish-blue', 'blue', 'blue-purple', 'purple', 'magenta', 'magenta-red', 'magenta-redder', 'white']
+ note: yellow-orange and greenish-blue are more discernible than their counterparts
+ default colorscheme: mute cyan; solo yellow-orange; bigknob blue
+
+FLAG REGISTER (OR-able bitfield):
+0xa0 10 00  # led touch strip on flag?
+0xa0 80 00  # key color response, color can be set by message if off
+0xa0 00 04  # octave shift keys color response, led can be set by message if off
+0xa0 01 00  # turn on above display buttons color response, also turn off usb hid input for those
+0xa0 02 00  # turn off usb hid input for knobs
+  will instead generate 0xaa events
+0xa0 00 08  # turn on usb hid input for wheels
+  not touchstrip, will still generate 0xaa events
+
+USB INPUT REPORT:
+0x01
+ 72 bits (9 byte)         buttons pressed (bitfield)
+ 8x uint16_t 0..999       knob values
+ 2x uint16_t 0..1023      ?
+ 2x 4 bits   0..15        second is bigknob turning (infinitely looping turn encoder)
+ 1x uint8_t  0..255       something with octave transpose, seems to be lowest note (by midi index)
+0x02
+ 2x uint16_t 0..2047
+ 3x uint16_t 0..65534
+0xaa
+ 25x uint16_t 0..65534
+ aa 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 00 20 41 00 55 00 00 00 00 00 00 00 00 00 00 00 00 00
+  7f: 8x buttons
+  55: touchstrip
+ aa 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 00 20 7f 00 6e 00 00 00 00 00 00 00 00 00 00 00 00 00
+  7f after 20: mod wheel
+ aa 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 7f 00 ff 3f 3d 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  ff3f: pitch wheel (less resolution than 0x02 report)
+ first 8 uint16_t's:
+  active if 0xa0 01 00 is set, seem to be midi value related?
+  probably depends on midi config, qkontrol sample config:
+  first 2 buttons set value to 7f00 when pressed, generate new event each time pressed
+  other buttons: toggle value between 0000 and 7f00, together with led backlight
+0x02
+ 25x uint16_t 0..65534
+0x40
+ 15x uint16_t 0..65534
+0x0f
+ uint8_t
+
+
+led message ordering:
+ute, solo, backlit buttons, knob left, up, down, right,  left button matrix, right button matrix, left left button matrix, led touch strip O.o

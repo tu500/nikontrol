@@ -1,0 +1,7 @@
+hid reports:
+
+02 uint16_t x4 + 2 unknown (0) bytes
+  pitch wheel   8800 - c806
+  mod wheel     1401 - 6507
+  led strip     mon. increasing value each time led strip is changed?
+  led strip     0000 - 0004  current led strip position, resets when not touching anymore

@@ -1,0 +1,14 @@
+  +-o PRT3@fd300000  <class AppleUSBEHCIPort, id 0x100000282, registered, matched, active, busy 0 (125 ms), retain 18>
+  | +-o KOMPLETE KONTROL S61 MK2@fd300000  <class IOUSBHostDevice, id 0x1000002ad, registered, matched, active, busy 0 (125 ms), retain 38>
+  |   +-o AppleUSBHostLegacyClient  <class AppleUSBHostLegacyClient, id 0x1000002b0, !registered, !matched, active, busy 0, retain 10>
+  |   +-o AppleUSBHostCompositeDevice  <class AppleUSBHostCompositeDevice, id 0x1000002b3, !registered, !matched, active, busy 0, retain 4>
+  |   +-o KOMPLETE KONTROL S61 MK2@0  <class IOUSBHostInterface, id 0x1000002b5, registered, matched, active, busy 0 (15 ms), retain 6>
+  |   +-o KOMPLETE KONTROL S61 MK2 MIDI@1  <class IOUSBHostInterface, id 0x1000002b6, registered, matched, active, busy 0 (13 ms), retain 9>
+  |   +-o KOMPLETE KONTROL S61 MK2 HID@2  <class IOUSBHostInterface, id 0x1000002b7, registered, matched, active, busy 0 (114 ms), retain 12>
+  |   | +-o IOUSBHostHIDDevice@fd300000,2  <class IOUSBHostHIDDevice, id 0x10000032e, registered, matched, active, busy 0 (27 ms), retain 10>
+  |   |   +-o IOHIDInterface  <class IOHIDInterface, id 0x100000334, registered, matched, active, busy 0 (24 ms), retain 6>
+  |   |   +-o IOHIDLibUserClient  <class IOHIDLibUserClient, id 0x100000443, !registered, !matched, active, busy 0, retain 6>
+  |   |   +-o IOHIDLibUserClient  <class IOHIDLibUserClient, id 0x100000518, !registered, !matched, active, busy 0, retain 6>
+  |   +-o KOMPLETE KONTROL S61 MK2 BD@3  <class IOUSBHostInterface, id 0x1000002b8, registered, matched, active, busy 0 (13 ms), retain 8>
+  |   +-o KOMPLETE KONTROL S61 MK2 DFU@4  <class IOUSBHostInterface, id 0x1000002b9, registered, matched, active, busy 0 (12 ms), retain 6>
+
